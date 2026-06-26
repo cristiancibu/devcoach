@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="120" height="120">
+  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="180" height="120">
 </p>
 
 <h1 align="center">🧠 DevCoach</h1>
