@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="180" height="40">
+  <img src="https://raw.githubusercontent.com/cristiancibu/devcoach/main/media/main_logo.png" alt="DevCoach Logo" width="180" height="40">
 </p>
 
 <p align="center">
