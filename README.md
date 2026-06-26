@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="180" height="120">
+  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="180" height="40">
 </p>
-
-<h1 align="center">🧠 DevCoach</h1>
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID">
