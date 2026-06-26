@@ -1,4 +1,17 @@
-# 🧠 DevCoach
+<p align="center">
+  <img src="https://i.imgur.com/btyYYI3.png" alt="DevCoach Logo" width="120" height="120">
+</p>
+
+<h1 align="center">🧠 DevCoach</h1>
+
+<p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID">
+    <img src="https://img.shields.io/visualstudio/marketplace/i/YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID?style=flat-square&color=blue" alt="Visual Studio Marketplace Installs">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID">
+    <img src="https://img.shields.io/visualstudio/marketplace/r/YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID?style=flat-square&color=green" alt="Visual Studio Marketplace Rating">
+  </a>
+</p>
 
 **DevCoach is a VS Code extension that acts as your personal coding coach. It tracks your coding activity, builds smart sessions, and helps you maintain healthier work habits through real-time feedback and reminders.**
 
