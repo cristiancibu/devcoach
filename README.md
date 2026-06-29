@@ -111,4 +111,7 @@ DevCoach turns your editor into a smart companion that helps you:
 
 ## 📄 License
 
-MIT
+This project is source-available for personal and educational use only.
+This project is licensed under the PolyForm Noncommercial License 1.0.0.
+
+See the full license here: [LICENSE](LICENSE.txt)
