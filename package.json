@@ -10,7 +10,7 @@
     "compile": "pnpm build",
     "vscode:prepublish": "pnpm build"
   },
-  "icon": "media/icon.png",
+  "icon": "media/logo.png",
   "keywords": [
     "vscode",
     "extension",
@@ -27,9 +27,7 @@
   "publisher": "cristiancibu",
   "license": "PolyForm-Noncommercial-1.0.0",
   "packageManager": "pnpm@10.20.0",
-  "dependencies": {
-    "vscode": "^1.1.37"
-  },
+  "dependencies": {},
   "activationEvents": [
     "onCommand:devcoach.start",
     "onCommand:devcoach.stats",
@@ -93,6 +91,6 @@
     }
   },
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.125.0"
   }
 }
