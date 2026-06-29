@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID">
-    <img src="https://img.shields.io/visualstudio/marketplace/i/YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID?style=flat-square&color=blue" alt="Visual Studio Marketplace Installs">
+  <a href="https://marketplace.visualstudio.com/items?itemName=cristiancibu.devcoach">
+    <img src="https://img.shields.io/visualstudio/marketplace/i/cristiancibu.devcoach?style=flat-square&color=blue" alt="Visual Studio Marketplace Installs">
   </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID">
-    <img src="https://img.shields.io/visualstudio/marketplace/r/YOUR_PUBLISHER_NAME.YOUR_EXTENSION_ID?style=flat-square&color=green" alt="Visual Studio Marketplace Rating">
+  <a href="https://marketplace.visualstudio.com/items?itemName=cristiancibu.devcoach">
+    <img src="https://img.shields.io/visualstudio/marketplace/r/cristiancibu.devcoach?style=flat-square&color=green" alt="Visual Studio Marketplace Rating">
   </a>
 </p>
 
