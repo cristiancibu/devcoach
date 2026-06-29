@@ -10,6 +10,7 @@
     "compile": "pnpm build",
     "vscode:prepublish": "pnpm build"
   },
+  "icon": "media/icon.png",
   "keywords": [
     "vscode",
     "extension",
@@ -19,23 +20,36 @@
     "tracker"
   ],
   "categories": [
-    "Other"
+    "Other",
+    "Snippets"
   ],
   "author": "Cristian C.",
   "publisher": "cristiancibu",
-  "license": "ISC",
+  "license": "PolyForm-Noncommercial-1.0.0",
   "packageManager": "pnpm@10.20.0",
   "dependencies": {
     "vscode": "^1.1.37"
   },
   "activationEvents": [
-    "*"
+    "onCommand:devcoach.start",
+    "onCommand:devcoach.stats",
+    "onCommand:devcoach.resume",
+    "onCommand:devcoach.break",
+    "onCommand:devcoach.burnout"
   ],
   "devDependencies": {
     "@types/vscode": "^1.125.0",
     "esbuild": "^0.28.1",
     "typescript": "^6.0.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cristiancibu/devcoach"
+  },
+  "bugs": {
+    "url": "https://github.com/cristiancibu/devcoach/issues"
+  },
+  "homepage": "https://github.com/cristiancibu/devcoach#readme",
   "contributes": {
     "commands": [
       {
