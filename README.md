@@ -13,6 +13,8 @@
 
 **DevCoach is a VS Code extension that acts as your personal coding coach. It tracks your coding activity, builds smart sessions, and helps you maintain healthier work habits through real-time feedback and reminders.**
 
+![Break Started](media/break_started.png)
+
 ---
 
 ## 🚀 What it does
@@ -68,10 +70,14 @@ DevCoach monitors your total daily coding time and warns you when you’re overw
 - 6h → strong warning
 - 8h → burnout prevention alert
 
+![Burnout Protection Applied](media/burnout.png)
+![Burnout Protection](media/not_burnout.png)
+
 ---
 
 ### 🌙 Sleep Awareness
 Late-night coding sessions are detected, and DevCoach reminds you when it’s time to rest.
+![Sleep Awareness](media/sleep_reminder.png.png)
 
 ---
 
