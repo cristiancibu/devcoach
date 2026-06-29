@@ -1,5 +1,6 @@
 {
   "name": "devcoach",
+  "displayName": "DevCoach",
   "version": "1.0.0",
   "description": "A real-time coding companion, productivity tracker, and digital discipline coach for VS Code.",
   "main": "dist/extension.js",
@@ -9,8 +10,19 @@
     "compile": "pnpm build",
     "vscode:prepublish": "pnpm build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "vscode",
+    "extension",
+    "productivity",
+    "coding",
+    "coach",
+    "tracker"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "author": "Cristian C.",
+  "publisher": "cristiancibu",
   "license": "ISC",
   "packageManager": "pnpm@10.20.0",
   "dependencies": {
