@@ -20,9 +20,21 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("devcoach.start", () => {
+      if (sessionManager.getCurrentSession() && !sessionManager.isOnBreak()) {
+        provider.refresh();
+        vscode.window.showInformationMessage("DevCoach is already tracking this session.");
+        return;
+      }
+
       sessionManager.startActivity(vscode.window.activeTextEditor?.document);
       provider.refresh();
       vscode.window.showInformationMessage("DevCoach session started.");
+    }),
+
+    vscode.commands.registerCommand("devcoach.resume", () => {
+      sessionManager.resumeFromBreak(vscode.window.activeTextEditor?.document);
+      provider.refresh();
+      vscode.window.showInformationMessage("Back in focus mode.");
     }),
 
     vscode.commands.registerCommand("devcoach.stats", () => {
@@ -30,7 +42,13 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     vscode.commands.registerCommand("devcoach.break", () => {
-      sessionManager.endCurrentSession();
+      if (!sessionManager.getCurrentSession() && !sessionManager.isOnBreak()) {
+        provider.refresh();
+        vscode.window.showInformationMessage("Start a DevCoach session before taking a tracked break.");
+        return;
+      }
+
+      sessionManager.startBreak();
       provider.refresh();
       vscode.window.showInformationMessage("Break started. Step away and let your brain cool down.");
     }),

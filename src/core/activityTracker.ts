@@ -56,6 +56,12 @@ export class ActivityTracker {
     const elapsedMs = now - this.lastTickAt;
     this.lastTickAt = now;
 
+    if (this.sessionManager.isOnBreak()) {
+      this.notifier.maybeShowSleepReminder();
+      this.onActivityChanged();
+      return;
+    }
+
     const session = this.sessionManager.getCurrentSession();
     const lastActivityAt = this.sessionManager.getLastActivityAt();
 

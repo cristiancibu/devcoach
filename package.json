@@ -35,6 +35,10 @@
         "title": "DevCoach: Show Stats"
       },
       {
+        "command": "devcoach.resume",
+        "title": "DevCoach: Resume Session"
+      },
+      {
         "command": "devcoach.break",
         "title": "DevCoach: Take Break"
       },

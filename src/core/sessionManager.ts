@@ -19,6 +19,9 @@ export interface CodingSession {
 
 export interface SessionSnapshot {
   currentSession?: CodingSession;
+  isOnBreak: boolean;
+  breakStartedAt?: number;
+  currentBreakMs: number;
   todayActiveMs: number;
   todayIdleMs: number;
   sessionsToday: number;
@@ -27,15 +30,18 @@ export interface SessionSnapshot {
 }
 
 const STORAGE_KEY = "devcoach.sessions";
+const BREAK_STORAGE_KEY = "devcoach.breakStartedAt";
 
 export class SessionManager {
   private sessions: CodingSession[];
   private current?: CodingSession;
   private lastActivityAt?: number;
   private activeFile?: { languageId: string; fileName: string };
+  private breakStartedAt?: number;
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.sessions = context.globalState.get<CodingSession[]>(STORAGE_KEY, []);
+    this.breakStartedAt = context.globalState.get<number | undefined>(BREAK_STORAGE_KEY);
     const activeEditor = vscode.window.activeTextEditor;
     if (activeEditor) {
       this.activeFile = this.describeDocument(activeEditor.document);
@@ -44,6 +50,8 @@ export class SessionManager {
 
   startActivity(document?: vscode.TextDocument): CodingSession {
     const now = Date.now();
+    this.breakStartedAt = undefined;
+    void this.persistBreakState();
 
     if (!this.current || this.current.endedAt) {
       this.current = {
@@ -68,7 +76,10 @@ export class SessionManager {
 
   switchFile(document: vscode.TextDocument): void {
     this.activeFile = this.describeDocument(document);
-    this.startActivity(document);
+
+    if (!this.isOnBreak()) {
+      this.startActivity(document);
+    }
   }
 
   recordActiveTime(durationMs: number): void {
@@ -106,7 +117,33 @@ export class SessionManager {
     this.current.endedAt = Date.now();
     this.current = undefined;
     this.lastActivityAt = undefined;
+    this.breakStartedAt = undefined;
+    void this.persistBreakState();
     void this.persist();
+  }
+
+  startBreak(): void {
+    if (this.breakStartedAt) {
+      return;
+    }
+
+    this.breakStartedAt = Date.now();
+    this.lastActivityAt = undefined;
+    void this.persistBreakState();
+  }
+
+  resumeFromBreak(document?: vscode.TextDocument): CodingSession {
+    this.breakStartedAt = undefined;
+    void this.persistBreakState();
+    return this.startActivity(document);
+  }
+
+  isOnBreak(): boolean {
+    return Boolean(this.breakStartedAt);
+  }
+
+  getCurrentBreakMs(): number {
+    return this.breakStartedAt ? Date.now() - this.breakStartedAt : 0;
   }
 
   getCurrentSession(): CodingSession | undefined {
@@ -137,6 +174,9 @@ export class SessionManager {
 
     return {
       currentSession: this.current,
+      isOnBreak: this.isOnBreak(),
+      breakStartedAt: this.breakStartedAt,
+      currentBreakMs: this.getCurrentBreakMs(),
       todayActiveMs,
       todayIdleMs,
       sessionsToday: sessions.length,
@@ -158,5 +198,9 @@ export class SessionManager {
 
   private async persist(): Promise<void> {
     await this.context.globalState.update(STORAGE_KEY, this.sessions.slice(-180));
+  }
+
+  private async persistBreakState(): Promise<void> {
+    await this.context.globalState.update(BREAK_STORAGE_KEY, this.breakStartedAt);
   }
 }

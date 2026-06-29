@@ -4,7 +4,7 @@ import { StatsManager } from "./core/statsManager";
 import { SessionManager } from "./core/sessionManager";
 import { formatDuration } from "./utils/time";
 
-type PanelAction = "start" | "stats" | "break" | "burnout" | "refresh";
+type PanelAction = "start" | "resume" | "stats" | "break" | "burnout" | "refresh";
 
 export class DevCoachProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
@@ -57,8 +57,16 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
     const snapshot = this.sessionManager.getSnapshot();
     const stats = this.statsManager.getDailyStats();
     const session = snapshot.currentSession;
-    const isActive = Boolean(session);
+    const isOnBreak = snapshot.isOnBreak;
+    const isActive = Boolean(session) && !isOnBreak;
     const activeSessionMs = session?.activeMs ?? 0;
+    const breakStartedAt = snapshot.breakStartedAt ?? 0;
+    const breakElapsed = formatDuration(snapshot.currentBreakMs);
+    const stateLabel = isOnBreak ? "On break" : isActive ? "Coding" : "Waiting";
+    const heroTitle = isOnBreak ? `${breakElapsed} break` : `${stats.totalCodingTime} today`;
+    const heroInsight = isOnBreak
+      ? "Rest mode is active. Resume when you are ready to focus again."
+      : stats.insight;
     const breakProgress = clamp(Math.round((activeSessionMs / (2 * 60 * 60 * 1000)) * 100), 0, 100);
     const burnoutProgress = clamp(Math.round((stats.totalCodingMs / (8 * 60 * 60 * 1000)) * 100), 0, 100);
     const languages = stats.languages.slice(0, 5);
@@ -88,6 +96,17 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
           )
           .join("")
       : `<li><span>No file activity yet</span><strong>0m</strong></li>`;
+    const modeControls = isOnBreak
+      ? `
+        <button class="primary wide" data-action="resume">Resume</button>
+        <button class="ghost active" disabled>On Break</button>`
+      : isActive
+        ? `
+          <button class="ghost active" disabled>Coding</button>
+          <button class="primary" data-action="break">Break</button>`
+        : `
+          <button class="primary" data-action="start">Start</button>
+          <button class="ghost" disabled>Break</button>`;
 
     return `<!DOCTYPE html>
       <html lang="en">
@@ -108,6 +127,7 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
               --accent-text: var(--vscode-button-foreground);
               --warn: var(--vscode-notificationsWarningIcon-foreground);
               --ok: var(--vscode-testing-iconPassed);
+              --break: var(--vscode-charts-yellow);
             }
 
             * { box-sizing: border-box; }
@@ -150,7 +170,7 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
               min-width: 0;
               padding: 4px 8px;
               border-radius: 999px;
-              color: ${isActive ? "var(--ok)" : "var(--muted)"};
+              color: ${isOnBreak ? "var(--break)" : isActive ? "var(--ok)" : "var(--muted)"};
               background: color-mix(in srgb, currentColor 12%, transparent);
               font-size: 11px;
               font-weight: 700;
@@ -233,6 +253,11 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
               gap: 8px;
             }
 
+            .actions.utility {
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              margin-top: -2px;
+            }
+
             button {
               min-height: 34px;
               border: 0;
@@ -245,10 +270,35 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
               font-weight: 700;
             }
 
-            button.secondary {
+            button.secondary,
+            button.ghost {
               border: 1px solid var(--border);
               color: var(--text);
               background: transparent;
+            }
+
+            button.primary {
+              color: var(--accent-text);
+              background: var(--accent);
+            }
+
+            button.wide {
+              grid-column: span 1;
+            }
+
+            button.active {
+              color: var(--muted);
+              background: color-mix(in srgb, var(--muted) 12%, transparent);
+              cursor: default;
+            }
+
+            button:disabled {
+              opacity: 0.72;
+              cursor: default;
+            }
+
+            button:disabled:hover {
+              filter: none;
             }
 
             .card {
@@ -327,17 +377,24 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
               color: var(--muted);
               line-height: 1.35;
             }
+
+            .mode-note {
+              margin: -2px 0 0;
+              color: var(--muted);
+              font-size: 12px;
+              line-height: 1.35;
+            }
           </style>
         </head>
         <body>
           <main class="shell">
             <section class="hero">
               <div class="status">
-                <span class="pill"><span class="dot"></span>${isActive ? "Active session" : "Waiting"}</span>
+                <span class="pill"><span class="dot"></span>${stateLabel}</span>
                 <button class="refresh" data-action="refresh" title="Refresh">↻</button>
               </div>
-              <h1>${escapeHtml(stats.totalCodingTime)} today</h1>
-              <p class="insight">${escapeHtml(stats.insight)}</p>
+              <h1 data-break-start="${breakStartedAt}">${escapeHtml(heroTitle)}</h1>
+              <p class="insight">${escapeHtml(heroInsight)}</p>
             </section>
 
             <section class="metrics">
@@ -348,8 +405,11 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
             </section>
 
             <section class="actions">
-              <button data-action="start">Start</button>
-              <button class="secondary" data-action="break">Break</button>
+              ${modeControls}
+            </section>
+            <p class="mode-note">${escapeHtml(buildModeNote(isActive, isOnBreak))}</p>
+
+            <section class="actions utility">
               <button class="secondary" data-action="stats">Stats</button>
               <button class="secondary" data-action="burnout">Burnout</button>
             </section>
@@ -384,6 +444,22 @@ export class DevCoachProvider implements vscode.WebviewViewProvider {
                 vscode.postMessage({ action: button.dataset.action });
               });
             });
+
+            const title = document.querySelector("[data-break-start]");
+            const breakStartedAt = Number(title?.dataset.breakStart || 0);
+
+            if (title && breakStartedAt > 0) {
+              const format = (ms) => {
+                const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                return minutes + ":" + String(seconds).padStart(2, "0") + " break";
+              };
+
+              setInterval(() => {
+                title.textContent = format(Date.now() - breakStartedAt);
+              }, 1000);
+            }
           </script>
         </body>
       </html>`;
@@ -405,6 +481,18 @@ function escapeHtml(value: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function buildModeNote(isActive: boolean, isOnBreak: boolean): string {
+  if (isOnBreak) {
+    return "Break timer is running. Resume continues tracking from the current file.";
+  }
+
+  if (isActive) {
+    return "Coding mode is active. Start is locked so you do not accidentally restart.";
+  }
+
+  return "Start opens a coding session. Break becomes available once you are in flow.";
 }
 
 function getNonce(): string {
