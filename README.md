@@ -40,10 +40,14 @@ DevCoach automatically detects when you start and stop coding, building structur
 ### ☕ Break Reminders
 You’ll receive reminders every 2 hours of active coding to take breaks and reset focus.
 
+![Break Reminders](media/break_reminder.png)
+
 ---
 
 ### 💤 Idle Detection
 If you stop coding, DevCoach detects inactivity and responds with motivational messages to help you get back on track.
+
+![Idle Detection](media/idle.png)
 
 ---
 
@@ -85,32 +89,6 @@ It helps you build sustainable habits, not just productivity spikes.
 - Developers working long hours
 - Freelancers managing their own time
 - Anyone who tends to lose track of time while coding
-
----
-
-## 🛠️ Tech Stack
-
-- TypeScript
-- VS Code Extension API
-- Global Storage API
-- Event-driven architecture
-
----
-
-## 📦 MVP Scope
-
-This is an MVP focused on:
-
-- Activity tracking
-- Session management
-- Language time analytics
-- Smart reminders
-
-Future versions may include:
-- AI productivity summaries
-- Gamification system
-- GitHub integration
-- Focus mode / Pomodoro system
 
 ---
 
