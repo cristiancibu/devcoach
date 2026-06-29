@@ -77,7 +77,8 @@ DevCoach monitors your total daily coding time and warns you when you’re overw
 
 ### 🌙 Sleep Awareness
 Late-night coding sessions are detected, and DevCoach reminds you when it’s time to rest.
-![Sleep Awareness](media/sleep_reminder.png.png)
+![Sleep Awareness](media/sleep_awareness.png)
+
 
 ---
 
