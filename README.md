@@ -33,6 +33,8 @@ DevCoach runs silently in the background while you code and turns your activity 
 ### ⏱️ Smart Session Tracking
 DevCoach automatically detects when you start and stop coding, building structured sessions based on real activity instead of fixed timers.
 
+![Smart Session Tracking](media/menu.png)
+
 ---
 
 ### ☕ Break Reminders
